@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include "stm32U5xx.h"
 #include "dyn2.h"
 #include "constants.h"
 
@@ -100,20 +101,24 @@ int main(void)
   MX_UART4_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t ID = 0x01;
-  dyn2_torque(ID,TORQUE_ON);
 
+  MOTOR XL430_1 = {
+       .model = XL430,
+       .baudrate = 57600,
+       .uart = huart1, // Assuming huart4 is already defined elsewhere
+       .id = 1
+   };
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  dyn2_led(ID,LED_ON);
-	  dyn2_position(ID,180);
+	  dyn2_led(XL430_1,LED_ON);
+	  //dyn2_position(XL430_1,90);
 	  HAL_Delay(1000);
-	  dyn2_led(ID,LED_OFF);
-	  dyn2_position(ID,0);
+	  dyn2_led(XL430_1,LED_OFF);
+	  //dyn2_position(XL430_1,0);
 
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */

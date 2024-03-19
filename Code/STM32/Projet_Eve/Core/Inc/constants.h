@@ -18,6 +18,25 @@
 #define NbOfElements(x) (sizeof(x)/sizeof(x[0]))
 #define TIMEOUT 100
 #define BUFFER_SIZE 32
+/////////////////////////////////////// STRUCTURES
+// Enum defining motor models
+enum MOTOR_MODEL {
+    XL430,
+    XL320
+};
+
+// Struct defining a motor
+typedef struct MOTOR {
+    enum MOTOR_MODEL model; // Type corresponds to the model of the motor (either XL320 or XL430)
+    int baudrate;
+    UART_HandleTypeDef uart;
+    int id;
+} MOTOR; // Typedef the struct to simplify its use
+
+void init_XL430(MOTOR *motor, int baudrate, UART_HandleTypeDef uart, int id);
+void init_XL320(MOTOR *motor, int baudrate, UART_HandleTypeDef uart, int id);
+
+
 /////////////////////////////////////// INSTRUCTION
 
 extern const uint8_t PING;
@@ -44,10 +63,24 @@ extern const uint8_t HEADER_2;
 extern const uint8_t HEADER_3;
 extern const uint8_t HEADER_4;
 
-/////////////////////////////////////// ADDRESSES
-extern const uint8_t ADDRESS_TORQUE;
-extern const uint8_t ADDRESS_LED;
-extern const uint8_t ADDRESS_POSITION;
+/////////////////////////////////////// ADDRESSES XL430
+extern const uint8_t XL430_ADDRESS_ID;
+extern const uint8_t XL430_ADDRESS_BAUDRATE;
+extern const uint8_t XL430_ADDRESS_OPERATING_MODE;
+
+extern const uint8_t XL430_ADDRESS_TORQUE;
+extern const uint8_t XL430_ADDRESS_LED;
+extern const uint8_t XL430_ADDRESS_POSITION;
+/////////////////////////////////////// ADDRESSES XL320
+extern const uint8_t XL320_ADDRESS_ID;
+extern const uint8_t XL320_ADDRESS_BAUDRATE;
+
+extern const uint8_t XL320_ADDRESS_TORQUE;
+extern const uint8_t XL320_ADDRESS_LED;
+extern const uint8_t XL320_ADDRESS_POSITION;
+extern const uint8_t XL320_ADDRESS_MOVING_SPEED;
+
+
 /////////////////////////////////////// ERRORS
 
 

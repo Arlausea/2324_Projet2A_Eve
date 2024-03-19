@@ -13,10 +13,30 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include "constants.h"
+
 ///////////////////////////////////////
 #define NbOfElements(x) (sizeof(x)/sizeof(x[0]))
 #define TIMEOUT 100
 #define BUFFER_SIZE 32
+
+/////////////////////////////////////// MOTOR
+
+void init_XL430(MOTOR *motor, int baudrate, UART_HandleTypeDef uart, int id) {
+    motor->model = XL430;
+    motor->baudrate = baudrate;
+    motor->uart = uart;
+    motor->id = id;
+}
+
+// Function to initialize XL320 motor
+void init_XL320(MOTOR *motor, int baudrate, UART_HandleTypeDef uart, int id) {
+    motor->model = XL320;
+    motor->baudrate = baudrate;
+    motor->uart = uart;
+    motor->id = id;
+}
+
 /////////////////////////////////////// INSTRUCTION
 
 const uint8_t PING = 0x01;
@@ -44,11 +64,28 @@ const uint8_t HEADER_3 = 0xFD;
 const uint8_t HEADER_4 = 0x00;
 
 
-/////////////////////////////////////// ADDRESSES
+/////////////////////////////////////// ADDRESSES XL430
+//EEPROM
+const uint8_t XL430_ADDRESS_ID = 0x07;
+const uint8_t XL430_ADDRESS_BAUDRATE = 0x08;
+const uint8_t XL430_ADDRESS_OPERATING_MODE = 0x0B;
 
-const uint8_t ADDRESS_TORQUE = 0x40;
-const uint8_t ADDRESS_LED = 0x41;
-const uint8_t ADDRESS_POSITION = 0x74;
+
+//RAM
+const uint8_t XL430_ADDRESS_TORQUE = 0x40;
+const uint8_t XL430_ADDRESS_LED = 0x41;
+const uint8_t XL430_ADDRESS_POSITION = 0x74;
+
+/////////////////////////////////////// ADDRESSES XL320
+//EEPROM
+const uint8_t XL320_ADDRESS_ID = 0x03;
+const uint8_t XL320_ADDRESS_BAUDRATE = 0x04;
+//RAM
+const uint8_t XL320_ADDRESS_TORQUE = 0x18;
+const uint8_t XL320_ADDRESS_LED = 0x19;
+const uint8_t XL320_ADDRESS_POSITION = 0x1E;
+const uint8_t XL320_ADDRESS_MOVING_SPEED = 0x1E;
+
 
 /////////////////////////////////////// ERRORS
 
