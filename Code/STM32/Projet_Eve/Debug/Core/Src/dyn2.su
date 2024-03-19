@@ -7,4 +7,4 @@
 ../Core/Src/dyn2.c:167:5:dyn2_led	32	static
 ../Core/Src/dyn2.c:216:5:dyn2_torque	32	static
 ../Core/Src/dyn2.c:260:6:dyn2_position	72	static
-../Core/Src/dyn2.c:347:6:dyn2_rotation_mod	48	static
+../Core/Src/dyn2.c:348:6:dyn2_operating_mod	32	static

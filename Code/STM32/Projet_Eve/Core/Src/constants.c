@@ -74,6 +74,7 @@ const uint8_t XL430_ADDRESS_OPERATING_MODE = 0x0B;
 //RAM
 const uint8_t XL430_ADDRESS_TORQUE = 0x40;
 const uint8_t XL430_ADDRESS_LED = 0x41;
+const uint8_t XL430_ADDRESS_VELOCITY = 0x68;
 const uint8_t XL430_ADDRESS_POSITION = 0x74;
 
 /////////////////////////////////////// ADDRESSES XL320

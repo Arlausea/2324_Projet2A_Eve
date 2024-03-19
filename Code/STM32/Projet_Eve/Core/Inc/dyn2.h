@@ -29,6 +29,7 @@ uint8_t* dyn2_append_crc(uint8_t* instruction,uint16_t bufferSize);
 int dyn2_led(MOTOR motor,int status);
 int dyn2_torque(MOTOR motor,int mode);
 void dyn2_position(MOTOR motor,float angleInDeg);
+void dyn2_operating_mod(MOTOR motor,int mode);
 void dyn2_debug_sendArrayAsString(uint8_t* array, int size);
 
 

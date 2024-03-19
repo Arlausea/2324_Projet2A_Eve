@@ -283,10 +283,10 @@ void dyn2_position(MOTOR motor,float angleInDeg) {
 		}
 		int Angle_Value =(int) (angleInDeg/0.088);
 
-		DYN2_POSITION[10] = (Angle_Value >> 24) & 0xFF; // Extract the most significant byte
-		DYN2_POSITION[11] = (Angle_Value >> 16) & 0xFF; // Extract the second most significant byte
-		DYN2_POSITION[12] = (Angle_Value >> 8) & 0xFF;  // Extract the third most significant byte
-		DYN2_POSITION[13] = Angle_Value & 0xFF;         // Extract the least significant byte
+		DYN2_POSITION[10] =  Angle_Value & 0xFF;
+		DYN2_POSITION[11] = (Angle_Value >> 8) & 0xFF;
+		DYN2_POSITION[12] = (Angle_Value >> 16) & 0xFF;
+		DYN2_POSITION[13] = (Angle_Value >> 24) & 0xFF;
 
 		// SENDING
 		uint16_t size = (uint16_t) NbOfElements(DYN2_POSITION);
@@ -333,6 +333,7 @@ void dyn2_position(MOTOR motor,float angleInDeg) {
 
 }
 
+
 /*value :
 1 = velocity control,This mode controls velocity and ideal for wheel operation.,This mode is identical to the Wheel Mode(endless) from existing DYNAMIXEL.
 
@@ -344,15 +345,37 @@ void dyn2_position(MOTOR motor,float angleInDeg) {
 	512 turns are supported(-256[rev] ~ 256[rev]) and ideal for multi-turn wrists or conveyer systems or a system that requires an additional reduction gear.
 
  */
-void dyn2_rotation_mod(int mode){
-	uint8_t Dynamixel_ChangePosition_XL430[] ={0xFF, 0xFF, 0xFD, 0x00,/*id*/ 0x01, /*length*/0x09, 0x00,/*type instruction, ici write*/0x03
-			/*débutparam, address 116:*/ ,0x74,0x00
-			/*value in the address : 2048*/,0x00,0x08,0x00,0x00
-			/*CRC*/				,0xCA,0x89};
-	//0.088 [deg/pulse]	1[rev] : 0 ~ 4,09
-	uint16_t size = (uint16_t) NbOfElements(Dynamixel_ChangePosition_XL430);
-	dyn2_send(Dynamixel_ChangePosition_XL430, size);
+void dyn2_operating_mod(MOTOR motor,int mode){
+	if (motor.model == XL430) {
+			// Value range: 0 to 4095
+			uint8_t DYN2_OPERATING_MODE[13];
+			// HEADER
+			DYN2_OPERATING_MODE[0] = HEADER_1;
+			DYN2_OPERATING_MODE[1] = HEADER_2;
+			DYN2_OPERATING_MODE[2] = HEADER_3;
+			DYN2_OPERATING_MODE[3] = HEADER_4;
+			// ID
+			DYN2_OPERATING_MODE[4]= motor.id;
+			// LENGTH
+			DYN2_OPERATING_MODE[5]= NbOfElements(DYN2_OPERATING_MODE)- 7; // tkt ca marche
+			DYN2_OPERATING_MODE[6]= 0x00;
+			// INSTRUCTION
+			DYN2_OPERATING_MODE[7]= WRITE;
+			// PARAMETERS
+			// VALUE
 
+			DYN2_OPERATING_MODE[8]= XL430_ADDRESS_OPERATING_MODE;
+			DYN2_OPERATING_MODE[9]= 0x00;
+
+
+			DYN2_OPERATING_MODE[10] =  (uint8_t) mode; //velocity mode
+
+			// SENDING
+			uint16_t size = (uint16_t) NbOfElements(DYN2_OPERATING_MODE);
+			uint8_t* DYN2_OPERATING_MODE_CRC = dyn2_append_crc(DYN2_OPERATING_MODE,size);
+
+			dyn2_send(DYN2_OPERATING_MODE_CRC,size);
+	}
 }
 
 /////////////////////////////////////////////////////////////////// for EEPROM area, do NOT reset when rebooted, Torque need to be OFF to access it !!

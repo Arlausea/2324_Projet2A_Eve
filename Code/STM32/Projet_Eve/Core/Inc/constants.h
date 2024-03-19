@@ -70,6 +70,7 @@ extern const uint8_t XL430_ADDRESS_OPERATING_MODE;
 
 extern const uint8_t XL430_ADDRESS_TORQUE;
 extern const uint8_t XL430_ADDRESS_LED;
+extern const uint8_t XL430_ADDRESS_VELOCITY;
 extern const uint8_t XL430_ADDRESS_POSITION;
 /////////////////////////////////////// ADDRESSES XL320
 extern const uint8_t XL320_ADDRESS_ID;

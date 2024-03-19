@@ -108,17 +108,22 @@ int main(void)
        .uart = huart1, // Assuming huart4 is already defined elsewhere
        .id = 1
    };
+  dyn2_torque(XL430_1, TORQUE_ON);
+  //dyn2_operating_mod(XL430_1, 1);
+  //dyn2_torque(XL430_1, TORQUE_ON);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 	  dyn2_led(XL430_1,LED_ON);
-	  //dyn2_position(XL430_1,90);
+	  dyn2_position(XL430_1,0);
 	  HAL_Delay(1000);
 	  dyn2_led(XL430_1,LED_OFF);
-	  //dyn2_position(XL430_1,0);
+	  //dyn2_position(XL430_1,180);
 
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
