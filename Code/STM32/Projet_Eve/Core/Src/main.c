@@ -22,7 +22,10 @@
 #include "usart.h"
 #include "memorymap.h"
 #include "spi.h"
+#include "tim.h"
 #include "gpio.h"
+#include "stepper.h"
+#include "tmc2590.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -82,6 +85,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  Stepper stepper1;
 
   /* USER CODE END Init */
 
@@ -99,9 +103,23 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_UART4_Init();
   MX_SPI2_Init();
+  MX_TIM2_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
+  //lucas
   uint8_t ID = 0x01;
   dyn2_torque(ID,TORQUE_ON);
+
+  int order = 20;
+  tmc2590_Init(&htmc2590, &hspi2, GPIO_CSN1_GPIO_Port, GPIO_CSN1_Pin, FDC_3_GPIO_Port, FDC_3_Pin);
+
+  //fonction d'init
+
+
+  stepper_Init(&stepper1);
+  HAL_Delay(1000);
+  stepper1.angularPositionMax = 180;
 
   /* USER CODE END 2 */
 
@@ -109,6 +127,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  /* lucas
 	  dyn2_led(ID,LED_ON);
 	  dyn2_position(ID,180);
 	  HAL_Delay(1000);
@@ -116,6 +135,8 @@ int main(void)
 	  dyn2_position(ID,0);
 
 	  HAL_Delay(1000);
+	  */
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
