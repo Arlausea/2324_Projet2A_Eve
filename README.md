@@ -52,6 +52,7 @@ Exrtait du reference manual </br>
 
 Pour envoyer et recevoir des données, il est nécessaire de préciser si l'on transmet ou reçoit pour éviter les conflits sur le fil unique utilisé pour l'UART. Pour cela, on utilise les fonctions HAL correspondantes HAL_HalfDuplex_EnableTransmitter() et HAL_HalfDuplex_EnableReceiver().
 
+à des baudrates élevées, il est nécéssaire de passer en push-pull pour supprimer les effets capacitifs de la capacité présente en mode open drain. Dans le cas contraire on se retrouve avec des fronts ressemblants à des charges/décharges de condensateurs plutot que des beaux fronts carrés. 
 #### Protocole Dynamixel 2.0
 
 La majorité des informations ont été obtenues sur cette page https://emanual.robotis.com/docs/en/dxl/protocol2/
