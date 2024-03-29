@@ -106,12 +106,22 @@ int main(void)
        .model = XL430,
        .baudrate = 57600,
        .uart = huart1, // Assuming huart4 is already defined elsewhere
-       .id = 1
+       .id = 0xFE
    };
-  dyn2_torque(XL430_1, TORQUE_ON);
-  //dyn2_operating_mod(XL430_1, 1);
-  //dyn2_torque(XL430_1, TORQUE_ON);
+  MOTOR XL320_1 = {
+       .model = XL320,
+       .baudrate = 57600,
+       .uart = huart1, // Assuming huart4 is already defined elsewhere
+       .id = 0xFE
+   };
 
+  //dyn2_led(XL320_1,2);
+  float angle = 0;
+//  for( int i = 0;i<=5;i++){
+//	  dyn2_position(XL320_1,angle);
+//	  HAL_Delay(3000);
+//	  angle += 45;
+//  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -119,13 +129,25 @@ int main(void)
   while (1)
   {
 
-	  dyn2_led(XL430_1,LED_ON);
-	  dyn2_position(XL430_1,0);
-	  HAL_Delay(1000);
-	  dyn2_led(XL430_1,LED_OFF);
-	  //dyn2_position(XL430_1,180);
 
-	  HAL_Delay(1000);
+	  //dyn2_position(XL430_1,180);
+	  //dyn2_led(XL430_1, 1);
+	 // dyn2_led(XL430_1, 2);
+
+	  //dyn2_position(XL430_1, 90);
+	  //dyn2_position(XL430_1, 90);
+
+	  //HAL_Delay(2000);
+	  dyn2_reboot();
+
+	  //dyn2_led(XL430_1, 0);
+	  //dyn2_led(XL430_1,0);
+
+	  //dyn2_position(XL430_1, 0);
+	  //dyn2_position(XL430_1, 0);
+
+	  //HAL_Delay(2000);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

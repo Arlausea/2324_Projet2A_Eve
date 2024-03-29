@@ -102,12 +102,12 @@ int dyn2_send(uint8_t* buffer,uint16_t size){
 
 	//dyn2_debug_sendArrayAsString(buffer_crc, size); // for debuging purposes
 
-	HAL_HalfDuplex_EnableTransmitter(&huart4);
+	HAL_HalfDuplex_EnableTransmitter(&huart2);
 
-	HAL_UART_Transmit(&huart4, buffer, size, TIMEOUT);
+	HAL_UART_Transmit(&huart2, buffer, size, TIMEOUT);
 	// Wait until UART transmission is complete
-	while (HAL_UART_GetState(&huart4) != HAL_UART_STATE_READY);
-	HAL_HalfDuplex_EnableReceiver(&huart4);
+	while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY);
+	HAL_HalfDuplex_EnableReceiver(&huart2);
 
 	return 0;
 }
@@ -142,7 +142,7 @@ uint8_t* dyn2_read(uint8_t ID,uint8_t address,int NParam) {
 
 	dyn2_send(DYN2_read_CRC,size);
 
-    HAL_UART_Receive(&huart4, buffer, size, TIMEOUT); // Assuming TIMEOUT is defined elsewhere
+    HAL_UART_Receive(&huart2, buffer, size, TIMEOUT); // Assuming TIMEOUT is defined elsewhere
     return buffer;
 }
 
@@ -193,16 +193,17 @@ int dyn2_led(MOTOR motor,int status){
 	}
 	DYN2_LED[9]= 0x00;
 	// VALUE
-	switch(status){
-	case 0:
-		DYN2_LED[10]=LED_OFF;
-		break;
-	case 1:
-		DYN2_LED[10]=LED_ON;
-		break;
-	default :
-		return ERROR_LED_VALUE;
-	}
+//	switch(status){
+//	case 0:
+//		DYN2_LED[10]=LED_OFF;
+//		break;
+//	case 1:
+//		DYN2_LED[10]=LED_ON;
+//		break;
+//	default :
+//		return ERROR_LED_VALUE;
+//	}
+	DYN2_LED[10]=status;
 	// SENDING
 	uint16_t size = (uint16_t) NbOfElements(DYN2_LED);
 	uint8_t* DYN2_LED_CRC = dyn2_append_crc(DYN2_LED,size);
@@ -322,8 +323,8 @@ void dyn2_position(MOTOR motor,float angleInDeg) {
 		int Angle_Value =(int) (angleInDeg/0.29);
 
 
-		DYN2_POSITION[10] = (Angle_Value >> 8) & 0xFF;
-		DYN2_POSITION[11] = Angle_Value & 0xFF;
+		DYN2_POSITION[10] = Angle_Value & 0xFF;
+		DYN2_POSITION[11] =(Angle_Value >> 8) & 0xFF;
 		// SENDING
 		uint16_t size = (uint16_t) NbOfElements(DYN2_POSITION);
 		uint8_t* DYN2_POSITION_CRC = dyn2_append_crc(DYN2_POSITION,size);
@@ -357,4 +358,43 @@ void dyn2_rotation_mod(int mode){
 
 /////////////////////////////////////////////////////////////////// for EEPROM area, do NOT reset when rebooted, Torque need to be OFF to access it !!
 
+// for xl320 : 0 = 9600, 1 = 57600, 2=115200,3 = 1M
+int dyn2_baudrate(MOTOR motor,int baudrate_mode){
+	uint8_t DYN2_BAUDRATE[13];
+	// HEADER
+	DYN2_BAUDRATE[0] = HEADER_1;
+	DYN2_BAUDRATE[1] = HEADER_2;
+	DYN2_BAUDRATE[2] = HEADER_3;
+	DYN2_BAUDRATE[3] = HEADER_4;
+	// ID
+	DYN2_BAUDRATE[4]= motor.id;
+	// LENGTH
+	DYN2_BAUDRATE[5]= NbOfElements(DYN2_BAUDRATE)- 7; // tkt ça marche
+	DYN2_BAUDRATE[6]= 0x00;
+	// INSTRUCTION
+	DYN2_BAUDRATE[7]= WRITE;
+	// PARAMETERS
+	// ADDRRESS
+	if (motor.model == XL430) {
+		DYN2_BAUDRATE[8]= XL430_ADDRESS_BAUDRATE;
+	}
+	if (motor.model == XL320) {
+		DYN2_BAUDRATE[8]= XL320_ADDRESS_BAUDRATE;
+	}
+	DYN2_BAUDRATE[9]= 0x00;
+	// VALUE
+	if(baudrate_mode<0 || baudrate_mode>3){
+		return ERROR;
+	}
+	DYN2_BAUDRATE[10]=baudrate_mode;
+
+
+	// SENDING
+	uint16_t size = (uint16_t) NbOfElements(DYN2_BAUDRATE);
+	uint8_t* DYN2_BAUDRATE_CRC = dyn2_append_crc(DYN2_BAUDRATE,size);
+
+	dyn2_send(DYN2_BAUDRATE_CRC,size);
+	return 0;
+
+}
 

@@ -95,6 +95,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_UART4_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
   MOTOR XL430_1 = {
@@ -108,24 +109,36 @@ int main(void)
       .model = XL320,
       .baudrate = 1000000,
       .uart = huart4, // Assuming huart4 is already defined elsewhere
-      .id = 1
+      .id = 0xFE
   };
-  dyn2_torque(XL430_1,TORQUE_ON);
-  uint8_t* buffer = dyn2_read(1, XL430_ADDRESS_LED,1);
-  dyn2_debug_sendArrayAsString(buffer, 13);
+  //dyn2_torque(XL320_1, TORQUE_ON);
+  //float angle = 0;
+//  for(int i = 0;i<10;i++){
+//	  dyn2_led(XL320_1,2);
+//	  //dyn2_torque(XL320_1, TORQUE_ON);
+//	  dyn2_position(XL320_1, angle);
+//	  HAL_Delay(2000);
+//	  dyn2_led(XL320_1,0);
+//	  HAL_Delay(2000);
+//	  angle +=45;
+//
+//
+//  }
+  	 dyn2_led(XL320_1, 2);
+  	 //dyn2_torque(XL320_1, TORQUE_OFF);
+  	 //dyn2_baudrate(XL320_1, 1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1){
-	  dyn2_led(XL430_1,LED_ON);
 	  //dyn2_position(XL430_1,90);
-	  HAL_Delay(1000);
-	  dyn2_led(XL430_1,LED_OFF);
+	  //HAL_Delay(1000);
+	  //dyn2_led(XL320_1,LED_OFF);
 	  //dyn2_position(XL430_1,0);
 
-	  HAL_Delay(1000);
+	  //HAL_Delay(1000);
 
 
     /* USER CODE END WHILE */

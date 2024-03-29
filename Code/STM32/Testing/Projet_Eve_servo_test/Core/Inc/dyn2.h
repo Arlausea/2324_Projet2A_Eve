@@ -30,6 +30,7 @@ int dyn2_led(MOTOR motor,int status);
 int dyn2_torque(MOTOR motor,int mode);
 void dyn2_position(MOTOR motor,float angleInDeg);
 void dyn2_debug_sendArrayAsString(uint8_t* array, int size);
+int dyn2_baudrate(MOTOR motor,int baudrate_mode);
 
 
 

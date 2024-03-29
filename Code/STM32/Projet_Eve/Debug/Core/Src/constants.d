@@ -28,7 +28,7 @@ Core/Src/constants.o: ../Core/Src/constants.c ../Core/Inc/main.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_uart.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_uart_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h \
- ../Core/Inc/constants.h ../Core/Inc/main.h
+ ../Core/Inc/constants.h ../Core/Inc/main.h ../Core/Inc/usart.h
 ../Core/Inc/main.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h:
 ../Core/Inc/stm32u5xx_hal_conf.h:
@@ -61,3 +61,4 @@ Core/Src/constants.o: ../Core/Src/constants.c ../Core/Inc/main.h \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h:
 ../Core/Inc/constants.h:
 ../Core/Inc/main.h:
+../Core/Inc/usart.h:

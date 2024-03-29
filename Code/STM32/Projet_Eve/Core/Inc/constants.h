@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include "usart.h"
 ///////////////////////////////////////
 #define NbOfElements(x) (sizeof(x)/sizeof(x[0]))
 #define TIMEOUT 100

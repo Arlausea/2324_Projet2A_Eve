@@ -5,6 +5,7 @@
 ../Core/Src/dyn2.c:115:10:dyn2_read	40	static
 ../Core/Src/dyn2.c:153:6:dyn2_ping	32	static
 ../Core/Src/dyn2.c:167:5:dyn2_led	32	static
-../Core/Src/dyn2.c:216:5:dyn2_torque	32	static
-../Core/Src/dyn2.c:260:6:dyn2_position	72	static
-../Core/Src/dyn2.c:347:6:dyn2_rotation_mod	48	static
+../Core/Src/dyn2.c:217:5:dyn2_torque	32	static
+../Core/Src/dyn2.c:261:6:dyn2_position	72	static
+../Core/Src/dyn2.c:348:6:dyn2_rotation_mod	48	static
+../Core/Src/dyn2.c:362:5:dyn2_baudrate	32	static

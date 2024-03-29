@@ -193,16 +193,7 @@ int dyn2_led(MOTOR motor,int status){
 	}
 	DYN2_LED[9]= 0x00;
 	// VALUE
-	switch(status){
-	case 0:
-		DYN2_LED[10]=LED_OFF;
-		break;
-	case 1:
-		DYN2_LED[10]=LED_ON;
-		break;
-	default :
-		return ERROR_LED_VALUE;
-	}
+	DYN2_LED[10];
 	// SENDING
 	uint16_t size = (uint16_t) NbOfElements(DYN2_LED);
 	uint8_t* DYN2_LED_CRC = dyn2_append_crc(DYN2_LED,size);
@@ -292,6 +283,8 @@ void dyn2_position(MOTOR motor,float angleInDeg) {
 		uint16_t size = (uint16_t) NbOfElements(DYN2_POSITION);
 		uint8_t* DYN2_POSITION_CRC = dyn2_append_crc(DYN2_POSITION,size);
 
+		dyn2_torque(motor, TORQUE_ON);
+
 		dyn2_send(DYN2_POSITION_CRC,size);
 	}
 	if (motor.model == XL320) {
@@ -322,11 +315,13 @@ void dyn2_position(MOTOR motor,float angleInDeg) {
 		int Angle_Value =(int) (angleInDeg/0.29);
 
 
-		DYN2_POSITION[10] = (Angle_Value >> 8) & 0xFF;
-		DYN2_POSITION[11] = Angle_Value & 0xFF;
+		DYN2_POSITION[10] = Angle_Value & 0xFF;
+		DYN2_POSITION[11] = (Angle_Value >> 8) & 0xFF;
 		// SENDING
 		uint16_t size = (uint16_t) NbOfElements(DYN2_POSITION);
 		uint8_t* DYN2_POSITION_CRC = dyn2_append_crc(DYN2_POSITION,size);
+
+		dyn2_torque(motor, TORQUE_ON);
 
 		dyn2_send(DYN2_POSITION_CRC,size);
 	}
@@ -380,4 +375,97 @@ void dyn2_operating_mod(MOTOR motor,int mode){
 
 /////////////////////////////////////////////////////////////////// for EEPROM area, do NOT reset when rebooted, Torque need to be OFF to access it !!
 
+
+// for xl320 : 0 = 9600, 1 = 57600, 2=115200,3 = 1M
+int dyn2_baudrate(MOTOR motor,int baudrate_mode){
+	uint8_t DYN2_BAUDRATE[13];
+	// HEADER
+	DYN2_BAUDRATE[0] = HEADER_1;
+	DYN2_BAUDRATE[1] = HEADER_2;
+	DYN2_BAUDRATE[2] = HEADER_3;
+	DYN2_BAUDRATE[3] = HEADER_4;
+	// ID
+	DYN2_BAUDRATE[4]= motor.id;
+	// LENGTH
+	DYN2_BAUDRATE[5]= NbOfElements(DYN2_BAUDRATE)- 7; // tkt ça marche
+	DYN2_BAUDRATE[6]= 0x00;
+	// INSTRUCTION
+	DYN2_BAUDRATE[7]= WRITE;
+	// PARAMETERS
+	// ADDRRESS
+	if (motor.model == XL430) {
+		DYN2_BAUDRATE[8]= XL430_ADDRESS_BAUDRATE;
+	}
+	if (motor.model == XL320) {
+		DYN2_BAUDRATE[8]= XL320_ADDRESS_BAUDRATE;
+	}
+	DYN2_BAUDRATE[9]= 0x00;
+	// VALUE
+	if(baudrate_mode<0 || baudrate_mode>3){
+		return ERROR;
+	}
+	DYN2_BAUDRATE[10]=baudrate_mode;
+
+
+	// SENDING
+	uint16_t size = (uint16_t) NbOfElements(DYN2_BAUDRATE);
+	uint8_t* DYN2_BAUDRATE_CRC = dyn2_append_crc(DYN2_BAUDRATE,size);
+
+	dyn2_send(DYN2_BAUDRATE_CRC,size);
+	return 0;
+}
+
+int dyn2_set_id(MOTOR motor,int id){
+	uint8_t DYN2_SET_ID[13];
+	// HEADER
+	DYN2_SET_ID[0] = HEADER_1;
+	DYN2_SET_ID[1] = HEADER_2;
+	DYN2_SET_ID[2] = HEADER_3;
+	DYN2_SET_ID[3] = HEADER_4;
+	// ID
+	DYN2_SET_ID[4]= motor.id;
+	// LENGTH
+	DYN2_SET_ID[5]= NbOfElements(DYN2_SET_ID)- 7; // tkt ça marche
+	DYN2_SET_ID[6]= 0x00;
+	// INSTRUCTION
+	DYN2_SET_ID[7]= WRITE;
+	// PARAMETERS
+	// ADDRRESS
+	if (motor.model == XL430) {
+		DYN2_SET_ID[8]= XL430_ADDRESS_ID;
+	}
+	if (motor.model == XL320) {
+		DYN2_SET_ID[8]= XL320_ADDRESS_ID;
+	}
+	DYN2_SET_ID[9]= 0x00;
+	// VALUE
+	DYN2_SET_ID[10]=id;
+
+	// SENDING
+	uint16_t size = (uint16_t) NbOfElements(DYN2_SET_ID);
+	uint8_t* DYN2_SET_ID_CRC = dyn2_append_crc(DYN2_SET_ID,size);
+
+	dyn2_torque(motor, TORQUE_OFF);
+	dyn2_send(DYN2_SET_ID_CRC,size);
+	return 0;
+
+}
+int dyn2_reboot(){
+	uint8_t DYN2_REBOOT[10];
+	DYN2_REBOOT[0] = HEADER_1;
+	DYN2_REBOOT[1] = HEADER_2;
+	DYN2_REBOOT[2] = HEADER_3;
+	DYN2_REBOOT[3] = HEADER_4;
+	// ID
+	DYN2_REBOOT[4]= 1;
+	// LENGTH
+	DYN2_REBOOT[5]= 3; // tkt ça marche
+	DYN2_REBOOT[6]= 0x00;
+	// INSTRUCTION
+	DYN2_REBOOT[7]= REBOOT;
+	uint16_t size = (uint16_t) NbOfElements(DYN2_REBOOT);
+	uint8_t* DYN2_REBOOT_CRC = dyn2_append_crc(DYN2_REBOOT,size);
+	dyn2_send(DYN2_REBOOT_CRC,size);
+
+	}
 

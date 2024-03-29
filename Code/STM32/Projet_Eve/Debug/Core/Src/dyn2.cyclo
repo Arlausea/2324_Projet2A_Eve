@@ -4,7 +4,10 @@
 ../Core/Src/dyn2.c:101:5:dyn2_send	2
 ../Core/Src/dyn2.c:115:10:dyn2_read	3
 ../Core/Src/dyn2.c:153:6:dyn2_ping	1
-../Core/Src/dyn2.c:167:5:dyn2_led	5
-../Core/Src/dyn2.c:216:5:dyn2_torque	5
-../Core/Src/dyn2.c:260:6:dyn2_position	5
-../Core/Src/dyn2.c:348:6:dyn2_operating_mod	2
+../Core/Src/dyn2.c:167:5:dyn2_led	3
+../Core/Src/dyn2.c:207:5:dyn2_torque	5
+../Core/Src/dyn2.c:251:6:dyn2_position	5
+../Core/Src/dyn2.c:343:6:dyn2_operating_mod	2
+../Core/Src/dyn2.c:380:5:dyn2_baudrate	5
+../Core/Src/dyn2.c:418:5:dyn2_set_id	3
+../Core/Src/dyn2.c:453:5:dyn2_reboot	1
